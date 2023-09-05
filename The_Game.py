@@ -2,11 +2,7 @@ import os
 import random
 import time
 
-def char_creation():
-    ask_if_new_player()
-    
-# check if a given answer is within the list of possible answers.
-def check_if_in_options(var1, options):
+def check_if_in_options(var1, options):# check if a given answer (var1) is within the list of possible answers(options). Return True or False
     try:
         var1 = int(var1)
         if var1 in options:
@@ -15,9 +11,8 @@ def check_if_in_options(var1, options):
             return False
     except:
         return False
-    
-# Check if the given player name already exists in the player list.
-def check_player_name_in_names(name):
+
+def check_player_name_in_names(name):# Check if the given player name already exists in the player list (char_names.txt). Return True or False
     try:
         file.open('Python\Game.py\char_names.txt', 'x')
         file.close()
@@ -30,60 +25,150 @@ def check_player_name_in_names(name):
                 return True             
             else: 
                 return False    
-    
-#Sees if the player is a new player, loops unitl (1)YES or (2)NO. Return 1 or 2
-def ask_if_new_player(): 
-    put = input("Are you a new player?\n(1) - YES  (2) - NO\n> ")
+
+def ask_if_new_player(): #Ask if is a new player, loops unitl (1)YES or (2)NO. Return 1 or 2
+    put = input("Are you a new player?\n(1)-YES  (2)-NO\n> ")
     print()
     options = (1,2)
     if check_if_in_options(put, options):
         put = int(put)
         is_new_player(put)
         return put
-
     else:
         print("That is not one of the options")
         ask_if_new_player()
 
-# If "YES" (is a new player) calls new_player_into_messege. If "NO" (is not new player) ask for char name: 
-    # If char name exists, call begin(player_name). If doesn't exists ask if wanna create new char with that name: 
-        # If YES(Want to create new char) call get_new_player_name. if NO(Don't wanna create new char) starts again
-def is_new_player(put):
-    if put == 1:
+def is_new_player(put):# Get's the answer if is new player and acts on it.
+    if put == 1:        #If "YES" (Is new player)
         new_player_intro_messege()
-    else:
-        player_name = input(("What is your character's name?\n> ")).strip()
+        ask_if_understand_how_to_play()
+    else:               #If "NO" (Is NOT new player) 
+        player_name = input(("What is your character's name?\n> ")).strip().title()# Ask for the existing char's name
         print()
-        if check_player_name_in_names(player_name):
+        if check_player_name_in_names(player_name): #If char name already exists 
             print("I found you!")
             begin(player_name)
-        else: 
+        else:                                       #Didn't find the char name (Doesn't exist)
             print(f"There is no character called {player_name}")
-            create = input("Would you like to create a new one?\n(1) - YES (2) - NO\n> ")
+            create = input("Would you like to create a new one?\n(1)-YES (2)-NO\n> ") # Ask if want to create new char
             opt = (1,2)
             check_if_in_options(create, opt)
             if check_if_in_options:
                 int(create)
-                if create == 1:
-                    get_new_player_name()
-                else:
+                if create == 1:# If YES (Want to create new char)
+                    char_creation()
+                else:          # If NO (Does't want to create new char) 
                     print("\nThen let's try again...\n")
                     ask_if_new_player()
 
-# If new player, shows the intro, explain how game works and calls ask_if_understand_how_to_play.
-def new_player_intro_messege():
+def char_creation():# Creates a new plyable char
+    def get_new_player_name(): #Ask for new char name
+            player_name = input(("What should I call you?\nYour name: ")).strip().title()
+            print()
+            
+            while player_name == "":
+                player_name = input("Please, chose a name: ").strip()
+                
+            if check_player_name_in_names(player_name):
+                print(f"This name already exists. Would you like to play as {player_name} ?")
+                play_as = input("(1)-YES (2)-NO\n> ")
+                print()
+                options = (1,2)
+                
+                if check_if_in_options(play_as, options):
+                    play_as = int(play_as)
+                else:
+                    print("That is not one of the options")
+                    
+                if play_as == 1:
+                    begin(player_name)
+                else: 
+                    print("Then you will have to choose a different name!")
+                    get_new_player_name()
+            else:
+                print(f'Its very nice to meet you {player_name}')
+                with open('Python\Game.py\char_names.txt', 'a+') as file:
+                    file.write(f'\n{player_name}')
+                create_new_char_info_file(player_name)
+            begin(player_name)
+
+    def get_new_player_race():#Ask for new char race
+        race = input("What will be your character's race?\n(1)-Human (2)-Orc (3)-Elf (4)-Dwarf\n> ")
+        print()
+        options = (1,2,3,4)
+        if check_if_in_options(race,options):
+            pass
+        else:
+            print("That is not one of the options.")
+            get_new_player_race()
+
+        if race == "1":
+            race = "human"
+        elif race == "2":
+            race = "orc"
+        elif race == "3":
+            race = "elf"
+        elif race == "4":
+            race = "dwarf"
+        return race
+    
+    def get_new_player_cls():#Ask for new char class
+        cls = input("And what will be your class?\n(1)-Tank (2)-Mage (3)-Archer (4)-Assassin (5)-Summoner\n> ")
+        pass
+        options = (1,2,3,4,5)
+        if check_if_in_options(cls,options):
+            pass
+        else:
+            print("That is not one of the options.")
+            get_new_player_cls()
+
+        if cls == "1":
+            cls = "tank"
+        elif cls == "2":
+            cls = "mage"
+        elif cls == "3":
+            cls = "archer"
+        elif cls == "4":
+            cls = "assassin"
+        elif cls == "5":
+            cls = "summoner"
+        return cls
+    
+    def create_new_char_info_file(name):#Creates a txt file with the char's info
+        with open(f'Python\Game.py\{name}_info.txt', 'w') as file:
+            file.write(f"name={name},level=0,exp=0,race={get_new_player_race()},class={get_new_player_cls()}")
+
+    get_new_player_name()
+
+def new_player_intro_messege():# Intro messege for new users to explain how the game works
     print("Hello new adventurer!")
     print("Welcome to THE GAME.py")
     print("Are you ready for this new and exciting adventure?")
     print("This is a procedural RPG.")
     print("I will tell you what is happening and you will chose one of the option I give by inputting it's number.")
-    ask_if_understand_how_to_play()
 
-# Loops until "YES" (Understand). Calls get_new_player_name. 
-def ask_if_understand_how_to_play():
+def end_game_messege():# Messege to display whene the game ends
+    print("This is as far as the games goes for now...")
+    print("Stay tuned for more content!")
+    print("Thank you for playing THE GAME.py!")
+
+def new_player():# 
+    pass
+
+def begin(player_name):# The begining of the game. It all starts here.
+    print(f"Let's Begin {player_name}")
+    print()
+    game_end()
+
+def game_end():# A tragic ending to this uncomplete game.
+    end_game_messege()
+    time.sleep(2)
+    exit()
+
+def ask_if_understand_how_to_play():# Gives more detailed explanation (If needed). Loops until "YES" (Understand). Calls char_creation(). 
     start = 0
     while start != 1:
-        start = input("Do you understand?\n(1) - YES  (2) - NO\n> ")
+        start = input("Do you understand?\n(1)-YES  (2)-NO\n> ")
         options = (1,2)
         if check_if_in_options(start, options):
             start = int(start)            
@@ -94,7 +179,7 @@ def ask_if_understand_how_to_play():
             
         if start == 1:
             print("Great!")
-            get_new_player_name()
+            char_creation()
         elif start == 2:
             print("I will explain again...")
             print("This is a procedural RPG.")
@@ -105,103 +190,9 @@ def ask_if_understand_how_to_play():
             continue
         else:
             print("I think you didn't understand... ")
-            print("You can only input one of the options I give you. In this case, (1) for YES or (2) for NO")
+            print("You can only input one of the options I give you. In this case, (1)fr YES or (2)fr NO")
             continue
-        
-#gets the name of this new player
-def get_new_player_name():
-    player_name = input(("What should I call you?\nYour name: ")).strip()
-    print()
-    
-    while player_name == "":
-        player_name = input("Please, chose a name: ").strip()
-        
-    if check_player_name_in_names(player_name):
-        print(f"This name already exists. Would you like to play as {player_name} ?")
-        play_as = input("(1) - YES (2) - NO\n> ")
-        print()
-        options = (1,2)
-        
-        if check_if_in_options(play_as, options):
-            play_as = int(play_as)
-        else:
-            print("That is not one of the options")
-            
-        if play_as == 1:
-            begin(player_name)
-        else: 
-            print("Then you will have to choose a different name!")
-            get_new_player_name()
-    else:
-        print(f'Its very nice to meet you {player_name}')
-        with open('Python\Game.py\char_names.txt', 'a+') as file:
-            file.write(f'\n{player_name}')
-        create_new_char_info_file(player_name)
-    begin(player_name)
-
-# Ask de player for a race for a new character
-def get_player_race():
-    race = input("What will be your character's race?\n(1)-Human (2)-Orc (3)-Elf (4)-Dwarf\n> ")
-    print()
-    options = (1,2,3,4)
-    if check_if_in_options(race,options):
-        pass
-    else:
-        print("That is not one of the options.")
-        get_player_race()
-
-    if race == "1":
-        race = "human"
-    elif race == "2":
-        race = "orc"
-    elif race == "3":
-        race = "elf"
-    elif race == "4":
-        race = "dwarf"
-    return race
-
-# Ask de player for a classe for a new character
-def get_player_cls():
-    cls = input("And what will be your class?\n(1)-Tank (2)-Mage (3)-Archer (4)-Assassin (5)-Summoner\n> ")
-    pass
-    options = (1,2,3,4,5)
-    if check_if_in_options(cls,options):
-        print("ok")
-    else:
-        print("That is not one of the options.")
-        get_player_cls()
-
-    if cls == "1":
-        cls = "tank"
-    elif cls == "2":
-        cls = "mage"
-    elif cls == "3":
-        cls = "archer"
-    elif cls == "4":
-        cls = "assassin"
-    elif cls == "5":
-        cls = "summoner"
-    return cls
-
-# Creates a .txt file for a new character with it's info like: Name, Level, Exp, Class and Race.
-def create_new_char_info_file(name):
-    with open(f'Python\Game.py\{name}_info.txt', 'w') as file:
-        file.write(f"name = {name}\nlevel = 0\nexp = 0\nrace = {get_player_race()}\nclass = {get_player_cls()}")
-
-#the begining of the game. It all starts here.
-def begin(player_name):
-    print(f"Let's Begin {player_name}")
-    print()
-    game_end()
-   
-#A tragic ending to this uncomplete game.
-def game_end():
-    time.sleep(2)
-    print("This is as far as the games goes for now...")
-    print("Stay tuned for more content!")
-    print("Thank you for playing THE GAME.py!")
-    exit()
 
 
 
-char_creation()
+ask_if_new_player()
