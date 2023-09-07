@@ -10,4 +10,5 @@ All feedback is gratelly apreciated and welcome! Feel free to help me improve an
 This is still a VERY early version of what I want this game to be. There are several features I want to implement but either I didn't have time yet or I will need to study a little more to make it happen! 
 
 Thank you for visiting and Welcome to RPG.py!! 
+
 Developer: MrLuizon
