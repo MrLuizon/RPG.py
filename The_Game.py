@@ -2,6 +2,48 @@ import os
 import random
 import time
 
+
+
+class Human:
+    def __init__(self):
+        strength = 3
+        agility = 3
+        intelligence = 5
+        vitality = 3
+        
+class Orc:
+    def __init__(self):
+        strength = 5
+        agility = 2
+        intelligence = 2
+        vitality = 5
+        
+class Elf:
+    def __init__(self):
+        strength = 2
+        agility = 5
+        intelligence = 4
+        vitality = 3
+        
+class Dwarf:
+    def __init__(self):
+        strength = 4
+        agility = 2
+        intelligence = 3
+        vitality = 5
+
+class Tank:
+    pass
+class Mage:
+    pass
+class Archer:
+    pass
+class Assassin:
+    pass
+class Summoner:
+    pass
+
+
 def check_if_in_options(var1, options):# check if a given answer (var1) is within the list of possible answers(options). Return True or False
     try:
         var1 = int(var1)
@@ -103,13 +145,13 @@ def char_creation():# Creates a new plyable char
             get_new_player_race()
 
         if race == "1":
-            race = "human"
+            race = "Human"
         elif race == "2":
-            race = "orc"
+            race = "Orc"
         elif race == "3":
-            race = "elf"
+            race = "Elf"
         elif race == "4":
-            race = "dwarf"
+            race = "Dwarf"
         return race
     
     def get_new_player_cls():#Ask for new char class
@@ -123,15 +165,15 @@ def char_creation():# Creates a new plyable char
             get_new_player_cls()
 
         if cls == "1":
-            cls = "tank"
+            cls = "Tank"
         elif cls == "2":
-            cls = "mage"
+            cls = "Mage"
         elif cls == "3":
-            cls = "archer"
+            cls = "Archer"
         elif cls == "4":
-            cls = "assassin"
+            cls = "Assassin"
         elif cls == "5":
-            cls = "summoner"
+            cls = "Summoner"
         return cls
     
     def create_new_char_info_file(name):#Creates a txt file with the char's info
